@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-// addprofileCmd represents the addprofile command
+// addprofileCmd represents the profile add command
 var addprofileCmd = &cobra.Command{
-	Use:   "addprofile",
+	Use:   "add",
 	Short: "Add a new profile",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -24,9 +24,9 @@ var addprofileCmd = &cobra.Command{
 	},
 }
 
-// removeprofileCmd represents the removeprofile command
+// removeprofileCmd represents the profile remove command
 var removeprofileCmd = &cobra.Command{
-	Use:   "removeprofile",
+	Use:   "remove",
 	Short: "remove a profile",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -38,9 +38,9 @@ var removeprofileCmd = &cobra.Command{
 	},
 }
 
-// listProfilesCmd represents the listprofiles command
+// listProfilesCmd represents the profile list command
 var listProfilesCmd = &cobra.Command{
-	Use:   "profiles",
+	Use:   "list",
 	Short: "Show all available profiles",
 	Run: func(cmd *cobra.Command, args []string) {
 		profiles, err := GetProfiles()
@@ -53,9 +53,9 @@ var listProfilesCmd = &cobra.Command{
 	},
 }
 
-// setprofileCmd sets the profile in use
+// setprofileCmd represents the profile set command
 var setprofileCmd = &cobra.Command{
-	Use:   "setprofile",
+	Use:   "use",
 	Short: "Set the profile to use",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -96,9 +96,9 @@ var profileCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(addprofileCmd)
-	rootCmd.AddCommand(removeprofileCmd)
-	rootCmd.AddCommand(listProfilesCmd)
-	rootCmd.AddCommand(setprofileCmd)
 	rootCmd.AddCommand(profileCmd)
+	profileCmd.AddCommand(addprofileCmd)
+	profileCmd.AddCommand(removeprofileCmd)
+	profileCmd.AddCommand(listProfilesCmd)
+	profileCmd.AddCommand(setprofileCmd)
 }
