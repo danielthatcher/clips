@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // setCmd represents the set command
@@ -15,8 +14,7 @@ var setCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		variables[args[0]] = args[1]
-		viper.Set("variables", variables)
-		err := viper.WriteConfigAs(cfgFile)
+		err := SaveVariables()
 		if err != nil {
 			log.Fatalf("Failed to write configuration file to %s: %v\n", cfgFile, err)
 		}
@@ -28,14 +26,22 @@ var unsetCmd = &cobra.Command{
 	Use:   "unset [variable]",
 	Short: "Unset a variable",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("unset called")
+		delete(variables, args[0])
+		err := SaveVariables()
+		if err != nil {
+			log.Fatalf("Failed to write configuration file to %s: %v\n", cfgFile, err)
+		}
 	},
 }
 
+// variablesCmd represents the variables command
 var variablesCmd = &cobra.Command{
 	Use:   "variables",
 	Short: "List all set variables",
 	Run: func(cmd *cobra.Command, args []string) {
+		for k, v := range variables {
+			fmt.Printf("%s=%s\n", k, v)
+		}
 	},
 }
 

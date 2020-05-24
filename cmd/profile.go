@@ -83,6 +83,12 @@ var setprofileCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Failed write configuration to %s: %v\n", cfgFile, err)
 		}
+
+		// Save the variables the keep them case sensitive
+		err = SaveVariables()
+		if err != nil {
+			log.Fatalf("Failed to save variables to config file %s: %v\n", cfgFile, err)
+		}
 	},
 }
 

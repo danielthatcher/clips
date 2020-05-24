@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"path"
 	"path/filepath"
+
+	"github.com/spf13/viper"
 )
 
 type Template struct {
@@ -60,4 +62,23 @@ func GetTemplate(t string) (*Template, error) {
 	json.Unmarshal(b, tpl)
 	return tpl, nil
 
+}
+
+// GetConfigVariables gets the variables set in the configuration file
+func GetConfigVariables() map[string]string {
+	// Unfortunately, viper is case insensitive, so we have to load the config file manually
+	b, err := ioutil.ReadFile(cfgFile)
+	if err != nil {
+		return make(map[string]string, 0)
+	}
+	vc := &VariablesConfig{}
+	json.Unmarshal(b, vc)
+	return vc.Variables
+}
+
+// SaveVariables saves the variables the config file, respecting case
+func SaveVariables() error {
+	viper.Set("variables", variables)
+	err := viper.WriteConfigAs(cfgFile)
+	return err
 }

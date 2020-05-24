@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -148,18 +146,8 @@ func initConfig() {
 
 	profileDir = path.Join(configDir, profile)
 
-	// Get the default set values for variables
-	// Unfortunately, viper is case insensitive, so we have to load the config file manually
-	b, err := ioutil.ReadFile(cfgFile)
-	if err == nil {
-		vc := &VariablesConfig{}
-		json.Unmarshal(b, vc)
-		variables = vc.Variables
-	} else {
-		variables = make(map[string]string, 0)
-	}
-
-	// Process the passed variables, overwriting current values
+	// Process the passed variables, overwriting values from the config file with those specified on the command line
+	variables = GetConfigVariables()
 	for _, s := range varArgs {
 		split := strings.SplitN(s, "=", 2)
 		if len(split) != 2 {
