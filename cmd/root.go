@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/atotto/clipboard"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -18,6 +19,7 @@ var profile string
 var profileDir string
 var varArgs []string
 var variables map[string]string
+var copy bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -55,6 +57,11 @@ var rootCmd = &cobra.Command{
 
 		// Output to user
 		fmt.Println(line)
+
+		// Write to clipboard if requested
+		if copy {
+			clipboard.WriteAll(line)
+		}
 	},
 }
 
@@ -71,11 +78,12 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// Global flags
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.config/bline/config.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "", "", "config file (default is $HOME/.config/bline/config.yaml)")
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "profile name")
 
 	// root command flags
 	rootCmd.Flags().StringSliceVarP(&varArgs, "set", "s", make([]string, 0), "set a variable using varname=value (can be specified multiple times)")
+	rootCmd.Flags().BoolVarP(&copy, "copy", "c", false, "copy command to the clipboard")
 
 	// Bind to viper
 	viper.BindPFlag("profile", rootCmd.PersistentFlags().Lookup("profile"))
