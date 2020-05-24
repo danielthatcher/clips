@@ -14,6 +14,7 @@ import (
 type Template struct {
 	Line      string            `json:"line"`
 	Variables map[string]string `json:"variables"`
+	Defaults  map[string]string `json:"defaults"`
 }
 
 type VariablesConfig struct {

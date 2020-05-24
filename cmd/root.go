@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
@@ -20,6 +21,7 @@ var profileDir string
 var varArgs []string
 var variables map[string]string
 var copy bool
+var quiet bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -51,7 +53,25 @@ var rootCmd = &cobra.Command{
 			log.Fatalf("Failed to load template %s: %v\n", tpl, err)
 		}
 		line := template.Line
+		reader := bufio.NewReader(os.Stdin)
 		for repl, v := range template.Variables {
+			d := template.Defaults[v]
+
+			// Fill from stding if variable missing
+			if !quiet && variables[v] == "" {
+				fmt.Printf("%s: ", v)
+				val, err := reader.ReadString('\n')
+				if err != nil {
+					log.Fatalf("Failed to read from stdin: %v\n", err)
+				}
+				variables[v] = strings.TrimRight(val, "\n")
+			}
+
+			// Apply deafult if nothing else set
+			if variables[v] == "" {
+				variables[v] = d
+			}
+
 			line = strings.ReplaceAll(line, repl, variables[v])
 		}
 
@@ -84,6 +104,7 @@ func init() {
 	// root command flags
 	rootCmd.Flags().StringSliceVarP(&varArgs, "set", "s", make([]string, 0), "set a variable using varname=value (can be specified multiple times)")
 	rootCmd.Flags().BoolVarP(&copy, "copy", "c", false, "copy command to the clipboard")
+	rootCmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "don't ask for missing variables - blank values will be used instead")
 
 	// Bind to viper
 	viper.BindPFlag("profile", rootCmd.PersistentFlags().Lookup("profile"))
