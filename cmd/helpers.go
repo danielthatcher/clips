@@ -3,6 +3,8 @@ package cmd
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 
@@ -81,4 +83,17 @@ func SaveVariables() error {
 	viper.Set("variables", variables)
 	err := viper.WriteConfigAs(cfgFile)
 	return err
+}
+
+// EditFile opens the specified in an editor, respecting $EDITOR if it is set, otherwise using vim
+func EditFile(f string) error {
+	editor := os.Getenv("EDITOR")
+	if editor == "" {
+		editor = "vim"
+	}
+	c := exec.Command(editor, f)
+	c.Stdin = os.Stdin
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+	return c.Run()
 }
