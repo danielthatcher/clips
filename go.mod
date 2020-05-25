@@ -1,4 +1,4 @@
-module github.com/danielthatcher/bline
+module github.com/danielthatcher/clips
 
 go 1.14
 

@@ -25,7 +25,7 @@ var quiet bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "bline [template]",
+	Use:   "clips [template]",
 	Args:  cobra.ExactArgs(1),
 	Short: "Generate one-liners from templates",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -101,7 +101,7 @@ func init() {
 	log.SetFlags(0)
 
 	// Global flags
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "", "", "config file (default is $HOME/.config/bline/config.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "", "", "config file (default is $HOME/.config/clips/config.yaml)")
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "profile name")
 
 	// root command flags
@@ -130,7 +130,7 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		configDir = path.Join(home, ".config", "bline")
+		configDir = path.Join(home, ".config", "clips")
 
 		// Create the config dir if it doesn't exist
 		err = os.MkdirAll(configDir, os.ModePerm)
