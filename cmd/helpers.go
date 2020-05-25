@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -30,6 +31,21 @@ func GetProfiles() ([]string, error) {
 
 	profiles := make([]string, 0)
 	for _, f := range files {
+		// Symlinks return false for IsDir, so handle that here
+		symlink := f.Mode()&os.ModeSymlink != 0
+		if symlink {
+			ipath := path.Join(configDir, f.Name())
+			fpath, err := filepath.EvalSymlinks(ipath)
+			if err != nil {
+				log.Fatalf("Failed to evaluate symlink %s: %v\n", ipath, err)
+			}
+
+			f, err = os.Stat(fpath)
+			if err != nil {
+				log.Fatalf("Failed to follow symlink %s: %v\n", ipath, err)
+			}
+		}
+
 		if f.IsDir() {
 			profiles = append(profiles, f.Name())
 		}
