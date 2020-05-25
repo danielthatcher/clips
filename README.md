@@ -1,10 +1,10 @@
 # clips
-A simple tool to generate snippets on the command line using templates. For example, generating bash one liners straight to the clipboard in situation where functions and aliases in config files aren't practical.
+A simple tool to generate snippets on the command line using templates. For example, generating bash one liners straight to the clipboard in situations where functions and aliases in config files aren't practical.
 
 See the [Tips](#tips) section for an example use case.
 
 ## Installation
-With `go` install and a properly configured `$GOPATH`, simply run
+With `go` installed and a properly configured `$GOPATH`, simply run
 ```
 go get -u github.com/danielthatcher/clips
 ```
@@ -15,11 +15,11 @@ clips uses a template system based around JSON files. To view the available temp
 clips list
 ```
 
-To generate using one of the available templates, run
+To generate a snippet using one of the available templates, run
 ```
 clips [template]
 ```
-By default, this will ask you to fill in any missing variables for the template. To use defaults, as `-q`. To copy the result to the clipboard, add `-c`.
+By default, this will ask you to fill in any missing variables for the template. To use defaults, add `-q`. To copy the result to the clipboard, add `-c`.
 
 For a list of all options, use
 ```
@@ -48,7 +48,7 @@ clips [template] -s MYVAR=zzz
 ```
 
 ### Profiles
-Profiles provide a way to switch between the active templates. You can view your current profile with
+Profiles provide a way to switch between sets of active templates. You can view your current profile with
 ```
 clips profile
 ```
@@ -58,19 +58,19 @@ clips profile list
 ```
 The active profile can be changed with
 ```
-clips use [profile]
+clips profile use [profile]
 ```
 Profiles can be added using
 ```
-clips add [profile]
+clips profile add [profile]
 ```
 and removed using
 ```
-clips remove [profile]
+clips profile remove [profile]
 ```
 
 ## Tips
-This is particularly useful when combined with a program such as [rofi](https://github.com/davatorium/rofi) or [dmenu](https://tools.suckless.org/dmenu/). For example, I use the [profiles in my dotfile](https://github.com/danielthatcher/dotfiles2/tree/master/clips) for Boot2Root style CTFs with the following command bound to a hotkey:
+This is particularly useful when combined with a program such as [rofi](https://github.com/davatorium/rofi) or [dmenu](https://tools.suckless.org/dmenu/). For example, I use the [profiles in my dotfiles](https://github.com/danielthatcher/dotfiles2/tree/master/clips) for Boot2Root style CTFs with the following command bound to a hotkey:
 ```
 clips -q -c $(clips list | rofi -dmenu)
 ```
@@ -81,4 +81,4 @@ clips set RHOST <target-ip>
 ```
 I also keep a public SSH key stored in a variable.
 
-I can then press my assigned hotkey, and make a selection from a number of useful commands to run on the target machine (as well as some simpler templates to generate the URL of my local HTTP server, or simply copy `LHOST` or `RHOST` to the clipboard), which will then be copied to the clipboard, ready to be used. This saves remembering and typing out a large number of repetitive commands.
+I can then press my assigned hotkey, and make a selection from a number of useful commands to run on the target machine (as well as some simpler templates to generate the URL of my local HTTP server, or copy the `LHOST` or `RHOST` variables to the clipboard), which will then be copied to the clipboard, ready to be used. This saves remembering and repeatedly typing out repetitive commands.
