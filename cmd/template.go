@@ -56,6 +56,8 @@ var newCmd = &cobra.Command{
 		base := `{
 	"line": "",
 	"variables": {
+	},
+	"defaults": {
 	}
 }
 `

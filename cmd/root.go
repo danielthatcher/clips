@@ -97,6 +97,9 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
+	// Remove date and timestamp from log output
+	log.SetFlags(0)
+
 	// Global flags
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "", "", "config file (default is $HOME/.config/bline/config.yaml)")
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "profile name")
